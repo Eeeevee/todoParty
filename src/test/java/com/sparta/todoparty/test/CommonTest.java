@@ -16,4 +16,5 @@ public interface CommonTest {
 		.username(ANOTHER_PREFIX + TEST_USER_NAME)
 		.password(ANOTHER_PREFIX + TEST_USER_PASSWORD)
 		.build();
+
 }

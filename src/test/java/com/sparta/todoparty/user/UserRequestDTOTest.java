@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UserRequestDTOTest implements CommonTest {
 
 	@DisplayName("유저 요청 DTO 생성")
-	@Nested
+	@Nested	// 그룹 생성
 	class createUserRequestDTO {
 		@DisplayName("유저 요청 DTO 생성 성공")
 		@Test
@@ -72,6 +72,7 @@ class UserRequestDTOTest implements CommonTest {
 		}
 	}
 
+	// Validation 하는 팩토리를 통해서 validator 를 받아옴
 	private Set<ConstraintViolation<UserRequestDTO>> validate(UserRequestDTO userRequestDTO) {
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 		Validator validator = factory.getValidator();

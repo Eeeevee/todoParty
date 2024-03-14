@@ -20,84 +20,84 @@ import static org.mockito.BDDMockito.given;
 @ActiveProfiles("test")
 class JwtUtilTest implements CommonTest {
 
-	@Autowired
-	JwtUtil jwtUtil;
+    @Autowired
+    JwtUtil jwtUtil;
 
-	@Mock
-	private HttpServletRequest request;
+    @Mock
+    private HttpServletRequest request;
 
-	@BeforeEach
-	void setUp() {
-		jwtUtil.init();
-	}
+    @BeforeEach
+    void setUp() {
+        jwtUtil.init();
+    }
 
-	@DisplayName("토큰 생성")
-	@Test
-	void createToken() {
-		// when
-		String token = jwtUtil.createToken(TEST_USER_NAME);
+    @DisplayName("토큰 생성")
+    @Test
+    void createToken() {
+        // when
+        String token = jwtUtil.createToken(TEST_USER_NAME);
 
-		// then
-		assertNotNull(token);
-	}
+        // then
+        assertNotNull(token);
+    }
 
-	@DisplayName("토큰 추출")
-	@Test
-	void resolveToken() {
-		// given
-		var token = "test-token";
-		var bearerToken = BEARER_PREFIX + token;
+    @DisplayName("토큰 추출")
+    @Test
+    void resolveToken() {
+        // given
+        var token = "test-token";
+        var bearerToken = BEARER_PREFIX + token;
 
-		// when
-		given(request.getHeader(JwtUtil.AUTHORIZATION_HEADER)).willReturn(bearerToken);
-		var resolvedToken = jwtUtil.resolveToken(request);
+        // when
+        given(request.getHeader(JwtUtil.AUTHORIZATION_HEADER)).willReturn(bearerToken);
+        var resolvedToken = jwtUtil.resolveToken(request);
 
-		// then
-		assertEquals(token, resolvedToken);
-	}
+        // then
+        assertEquals(token, resolvedToken);
+    }
 
-	@DisplayName("토큰 검증")
-	@Nested
-	class validateToken {
-		
-		@DisplayName("토큰 검증 성공")
-		@Test
-		void validateToken_success() {
-			// given
-			String token = jwtUtil.createToken(TEST_USER_NAME).substring(7);
+    @DisplayName("토큰 검증")
+    @Nested
+    class validateToken {
 
-			// when
-			boolean isValid = jwtUtil.validateToken(token);
+        @DisplayName("토큰 검증 성공")
+        @Test
+        void validateToken_success() {
+            // given
+            String token = jwtUtil.createToken(TEST_USER_NAME).substring(7);
 
-			// then
-			assertTrue(isValid);
-		}
+            // when
+            boolean isValid = jwtUtil.validateToken(token);
 
-		@DisplayName("토큰 검증 실패 - 유효하지 않은 토큰")
-		@Test
-		void validateToken_fail() {
-			// given
-			String invalidToken = "invalid-token";
+            // then
+            assertTrue(isValid);
+        }
 
-			// when
-			boolean isValid = jwtUtil.validateToken(invalidToken);
+        @DisplayName("토큰 검증 실패 - 유효하지 않은 토큰")
+        @Test
+        void validateToken_fail() {
+            // given
+            String invalidToken = "invalid-token";
 
-			// then
-			assertFalse(isValid);
-		}
-	}
+            // when
+            boolean isValid = jwtUtil.validateToken(invalidToken);
 
-	@DisplayName("토큰에서 UserInfo 조회")
-	@Test
-	void getUserInfoFromToken() {
-		// given
-		String token = jwtUtil.createToken(TEST_USER_NAME).substring(7);
+            // then
+            assertFalse(isValid);
+        }
+    }
 
-		// when
-		Claims claims = jwtUtil.getUserInfoFromToken(token);
-		// then
-		assertNotNull(claims);
-		assertEquals(TEST_USER_NAME, claims.getSubject());
-	}
+    @DisplayName("토큰에서 UserInfo 조회")
+    @Test
+    void getUserInfoFromToken() {
+        // given
+        String token = jwtUtil.createToken(TEST_USER_NAME).substring(7);
+
+        // when
+        Claims claims = jwtUtil.getUserInfoFromToken(token);
+        // then
+        assertNotNull(claims);
+        assertEquals(TEST_USER_NAME, claims.getSubject());
+    }
 
 }
